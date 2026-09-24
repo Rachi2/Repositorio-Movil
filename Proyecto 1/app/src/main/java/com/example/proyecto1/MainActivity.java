@@ -1,35 +1,36 @@
 package com.example.proyecto1;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.proyecto1.databinding.ActivityMainBinding;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import java.util.HashMap;
+import java.util.Map;
 
+// Pantalla temporal para comprobar que Firebase está conectado.
+// Se reemplazará por LoginActivity en la Fase 1.
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
+    private static final String TAG = "FIREBASE";
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
@@ -39,54 +40,32 @@ public class MainActivity extends AppCompatActivity {
         });
         setSupportActionBar(binding.toolbar);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment_content_main);
+        // Prueba 1: ¿la app encontró el google-services.json?
+        String projectId = FirebaseApp.getInstance().getOptions().getProjectId();
+        Log.d(TAG, "Conectado al proyecto: " + projectId);
+        binding.content.tvStatus.setText("Firebase conectado ✅\nProyecto: " + projectId);
 
-        if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
-
-            appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        }
-
-        binding.fab.setOnClickListener(
-                view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show()
-        );
+        // Prueba 2: ¿se puede escribir en Firestore?
+        binding.content.btnTestFirestore.setOnClickListener(v -> testFirestore());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    private void testFirestore() {
+        binding.content.tvFirestore.setText("Enviando…");
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Map<String, Object> data = new HashMap<>();
+        data.put("mensaje", "Hola desde Android");
+        data.put("fecha", FieldValue.serverTimestamp());
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment_content_main);
-        boolean handled = false;
-        if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
-            handled = NavigationUI.navigateUp(navController, appBarConfiguration);
-        }
-        return handled || super.onSupportNavigateUp();
+        FirebaseFirestore.getInstance()
+                .collection("pruebas")
+                .add(data)
+                .addOnSuccessListener(doc -> {
+                    Log.d(TAG, "Firestore OK, documento: " + doc.getId());
+                    binding.content.tvFirestore.setText("Firestore funciona ✅\nDocumento: " + doc.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Firestore falló", e);
+                    binding.content.tvFirestore.setText("Error en Firestore ❌\n" + e.getMessage());
+                });
     }
 }
