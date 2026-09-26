@@ -1,6 +1,6 @@
-package com.example.proyecto1.data.remote;
+package com.example.proyecto1.data.repository;
 
-import com.example.proyecto1.data.repository.UserRepositoryImpl;
+import com.example.proyecto1.data.remote.FirebaseAuthSource;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.AuthRepository;
 import com.example.proyecto1.domain.repository.ChatRepository;
@@ -12,14 +12,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthRepositoryImpl implements AuthRepository {
     private final FirebaseAuthSource firebaseSource;
-    private final UserRepositoryImpl userRepository;
 
-    public AuthRepositoryImpl(FirebaseAuthSource source, UserRepositoryImpl user) {
+    public AuthRepositoryImpl(FirebaseAuthSource source) {
         this.firebaseSource = source;
-        this.userRepository = user;
     }
 
-    // toUser se encarga de llevar el user de Firebase a local
+    // // Convierte el FirebaseUser en el User del dominio
     private User toUser(FirebaseUser firebaseUser) {
         if (firebaseUser == null)
             return null;
@@ -31,7 +29,7 @@ public class AuthRepositoryImpl implements AuthRepository {
         return new User(id, name, email);
     }
 
-    // getError se encarga de las traducciones de los errores que tira el Firebase
+    // translateError se encarga de las traducciones de los errores que tira el Firebase
     private Exception translateError(Exception e) {
         if (e instanceof FirebaseAuthWeakPasswordException) {
             return new Exception("La contraseña es muy débil");
@@ -86,7 +84,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public User getCurrentUser() {
+    public User getCurrentUserUseCase() {
         return toUser(firebaseSource.getCurrentUser());
     }
 }

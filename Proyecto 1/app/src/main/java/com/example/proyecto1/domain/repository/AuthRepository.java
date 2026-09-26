@@ -9,5 +9,5 @@ public interface AuthRepository {
 
     void logout();
 
-    User getCurrentUser();
+    User getCurrentUserUseCase();
 }
