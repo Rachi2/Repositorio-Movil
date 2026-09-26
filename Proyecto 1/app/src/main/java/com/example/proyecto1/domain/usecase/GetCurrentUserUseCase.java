@@ -3,14 +3,14 @@ package com.example.proyecto1.domain.usecase;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.AuthRepository;
 
-public class GetCurrentUserCase {
+public class GetCurrentUserUseCase {
     private final AuthRepository authRepository;
 
-    public GetCurrentUserCase(AuthRepository auth){
+    public GetCurrentUserUseCase(AuthRepository auth){
         this.authRepository = auth;
     }
 
     public User execute(){
-        return authRepository.getCurrentUserUseCase();
+        return authRepository.getCurrentUser();
     }
 }

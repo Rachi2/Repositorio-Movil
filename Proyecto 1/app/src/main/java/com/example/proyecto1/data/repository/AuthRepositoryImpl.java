@@ -17,7 +17,7 @@ public class AuthRepositoryImpl implements AuthRepository {
         this.firebaseSource = source;
     }
 
-    // // Convierte el FirebaseUser en el User del dominio
+    // Convierte el FirebaseUser en el User del dominio
     private User toUser(FirebaseUser firebaseUser) {
         if (firebaseUser == null)
             return null;
@@ -84,7 +84,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public User getCurrentUserUseCase() {
+    public User getCurrentUser() {
         return toUser(firebaseSource.getCurrentUser());
     }
 }
