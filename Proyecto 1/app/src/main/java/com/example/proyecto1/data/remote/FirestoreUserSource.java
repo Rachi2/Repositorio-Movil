@@ -41,5 +41,5 @@ public class FirestoreUserSource {
                     callback.onSuccess(userDto);
                 })
                 .addOnFailureListener(callback::onError);
-  ;  }
+    }
 }
