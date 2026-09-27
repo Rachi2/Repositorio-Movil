@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta Kairo - Dark Cherry -->
+    <color name="bg_dark">#0D0709</color>
+    <color name="card_bg">#181014</color>
+    <color name="card_stroke">#2D1C23</color>
+    <color name="cherry_primary">#800020</color>
+    <color name="cherry_bright">#C1121F</color>
+    <color name="cherry_glow">#4A0E17</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#9E8B93</color>
 </resources>
