@@ -119,7 +119,7 @@ public class AuthViewModel extends ViewModel {
 
         loading.setValue(true);
         String cleanEmail = email.trim();
-        registerUseCase.execute(name, cleanEmail, password, createAuthCallback());
+        registerUseCase.execute(name.trim(), cleanEmail, password, createAuthCallback());
     }
 
     public void checkSession() {
