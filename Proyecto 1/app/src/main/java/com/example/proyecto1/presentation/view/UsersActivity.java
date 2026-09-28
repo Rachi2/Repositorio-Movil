@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.proyecto1.R;
@@ -43,9 +44,13 @@ public class UsersActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getUsers().observe(this, user -> {
-            adapter.setUsers(user);
-            if (adapter.getItemCount() == 0) {
+        viewModel.getUsers().observe(this, users -> {
+            adapter.setUsers(users);
+            if (users.isEmpty()) {
+                // Mensaje distinto si la lista está vacía por una búsqueda o porque no hay usuarios
+                binding.tvEmpty.setText(viewModel.isSearching()
+                        ? R.string.search_no_results
+                        : R.string.users_empty);
                 binding.tvEmpty.setVisibility(View.VISIBLE);
             } else {
                 binding.tvEmpty.setVisibility(View.GONE);
@@ -84,6 +89,21 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_users, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.search(newText);
+                return true;
+            }
+        });
         return true;
     }
 
