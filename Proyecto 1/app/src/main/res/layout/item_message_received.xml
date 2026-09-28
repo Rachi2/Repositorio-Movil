@@ -24,6 +24,17 @@
             android:textStyle="bold"
             tools:text="Nombre" />
 
+        <ImageView
+            android:id="@+id/ivMessageImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/image_description"
+            android:maxWidth="240dp"
+            android:maxHeight="240dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvMessageText"
             android:layout_width="wrap_content"

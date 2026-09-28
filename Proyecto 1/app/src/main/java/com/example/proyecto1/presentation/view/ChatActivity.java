@@ -1,8 +1,13 @@
 package com.example.proyecto1.presentation.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,6 +27,14 @@ public class ChatActivity extends AppCompatActivity {
 
     private ActivityChatBinding binding;
     private ChatViewModel viewModel;
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickImage = registerForActivityResult(
+            new ActivityResultContracts.PickVisualMedia(), uri -> {
+                if (uri != null) {
+                    viewModel.sendImage(uri.toString());
+                }
+            }
+    );
+
     private MessageAdapter adapter;
 
     @Override
@@ -53,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
         viewModel.initConversation(otherUserId);
 
         // El adapter necesita el id del usuario actual para saber qué mensajes van a la derecha
-        adapter = new MessageAdapter(viewModel.getCurrentUserId());
+        adapter = new MessageAdapter(viewModel.getCurrentUserId(), this::openImage);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         binding.rvMessages.setLayoutManager(layoutManager);
@@ -71,10 +84,31 @@ public class ChatActivity extends AppCompatActivity {
             if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
 
+        viewModel.getUploading().observe(this, isUploading -> {
+            if (isUploading) {
+                binding.progressUpload.setVisibility(View.VISIBLE);
+                binding.btnAttach.setEnabled(false);
+            } else {
+                binding.progressUpload.setVisibility(View.GONE);
+                binding.btnAttach.setEnabled(true);
+            }
+        });
+
         // SendMessageUseCase ya evita enviar mensajes vacíos
         binding.btnSend.setOnClickListener(v -> {
             viewModel.sendMessage(binding.etMessage.getText().toString());
             binding.etMessage.setText("");
         });
+
+        binding.btnAttach.setOnClickListener(v -> pickImage.launch(
+                new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()));
+    }
+
+    private void openImage(String imageUrl) {
+        Intent intent = new Intent(this, ImageViewerActivity.class);
+        intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, imageUrl);
+        startActivity(intent);
     }
 }

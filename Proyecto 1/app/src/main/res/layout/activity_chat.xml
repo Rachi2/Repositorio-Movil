@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/chatRoot"
     android:background="@color/bg_dark"
     tools:context=".presentation.view.ChatActivity">
 
@@ -39,6 +39,21 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="8dp">
+
+        <ImageButton
+            android:id="@+id/btnAttach"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/attach_description"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:tint="@color/cherry_bright" />
+
+        <ProgressBar
+            android:id="@+id/progressUpload"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/etMessage"

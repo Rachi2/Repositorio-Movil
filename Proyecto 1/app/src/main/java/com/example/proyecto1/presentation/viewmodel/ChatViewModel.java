@@ -1,12 +1,17 @@
 package com.example.proyecto1.presentation.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.example.proyecto1.data.local.ImageCompressor;
 import com.example.proyecto1.data.remote.FirebaseAuthSource;
 import com.example.proyecto1.data.remote.FirestoreChatSource;
 import com.example.proyecto1.data.remote.FirestoreUserSource;
+import com.example.proyecto1.data.remote.StorageSource;
 import com.example.proyecto1.data.repository.AuthRepositoryImpl;
 import com.example.proyecto1.data.repository.ChatRepositoryImpl;
 import com.example.proyecto1.data.repository.UserRepositoryImpl;
@@ -16,33 +21,32 @@ import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.domain.usecase.GetCurrentUserUseCase;
 import com.example.proyecto1.domain.usecase.GetMessagesUseCase;
 import com.example.proyecto1.domain.usecase.GetUserByIdUseCase;
+import com.example.proyecto1.domain.usecase.SendImageUseCase;
 import com.example.proyecto1.domain.usecase.SendMessageUseCase;
 
 import java.util.List;
 
-public class ChatViewModel extends ViewModel {
+public class ChatViewModel extends AndroidViewModel {
 
     private final SendMessageUseCase sendMessageUseCase;
     private final GetMessagesUseCase getMessagesUseCase;
     private final GetCurrentUserUseCase getCurrentUserUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
+    private final SendImageUseCase sendImageUseCase;
 
     private final MutableLiveData<List<Message>> _messages = new MutableLiveData<>();
-    public LiveData<List<Message>> getMessages() { return _messages; }
-
+    private final MutableLiveData<Boolean> uploading = new MutableLiveData<>();
     private final MutableLiveData<String> _error = new MutableLiveData<>();
-    public LiveData<String> getError() { return _error; }
-
     private ChatRepository.ListenerRegistration listenerRegistration;
     private String conversationId;
-
     // Datos del usuario conectado (los obtiene el ViewModel, no la Activity)
     private String currentUserId;
     private String currentUserName;
 
-    // Constructor vacío: así la Activity puede usar ViewModelProvider
-    public ChatViewModel() {
-        ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(new FirestoreChatSource());
+
+    public ChatViewModel(@NonNull Application application) {
+        super(application);
+        ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(new FirestoreChatSource(), new StorageSource(), new ImageCompressor(application));
         AuthRepositoryImpl authRepository = new AuthRepositoryImpl(new FirebaseAuthSource());
         UserRepositoryImpl userRepository = new UserRepositoryImpl(new FirestoreUserSource());
 
@@ -50,6 +54,19 @@ public class ChatViewModel extends ViewModel {
         this.getMessagesUseCase = new GetMessagesUseCase(chatRepository);
         this.getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
         this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
+        this.sendImageUseCase = new SendImageUseCase(chatRepository);
+    }
+
+    public LiveData<List<Message>> getMessages() {
+        return _messages;
+    }
+
+    public LiveData<Boolean> getUploading() {
+        return uploading;
+    }
+
+    public LiveData<String> getError() {
+        return _error;
     }
 
     public String getCurrentUserId() {
@@ -123,6 +140,25 @@ public class ChatViewModel extends ViewModel {
 
             @Override
             public void onError(Exception e) {
+                _error.setValue(e.getMessage());
+            }
+        });
+    }
+
+    public void sendImage(String imageUri) {
+        if (conversationId == null) {
+            return;
+        }
+        uploading.setValue(true);
+        sendImageUseCase.execute(conversationId, currentUserId, currentUserName, imageUri, new ChatRepository.RepositoryCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                uploading.setValue(false);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                uploading.setValue(false);
                 _error.setValue(e.getMessage());
             }
         });

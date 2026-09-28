@@ -3,11 +3,13 @@ package com.example.proyecto1.presentation.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.proyecto1.R;
 import com.example.proyecto1.domain.model.Message;
 
@@ -23,10 +25,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_RECEIVED = 2;
 
     private final String currentUserId;
+    private final OnImageClickListener imageClickListener;
     private List<Message> messages = new ArrayList<>();
 
-    public MessageAdapter(String currentUserId) {
+    public MessageAdapter(String currentUserId, OnImageClickListener imageClickListener) {
         this.currentUserId = currentUserId;
+        this.imageClickListener = imageClickListener;
     }
 
     public void setMessages(List<Message> messages) {
@@ -62,12 +66,39 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String timeStr = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(new Date(message.getTimestamp()));
 
         if (holder instanceof SentViewHolder) {
-            ((SentViewHolder) holder).tvText.setText(message.getText());
-            ((SentViewHolder) holder).tvTime.setText(timeStr);
+            SentViewHolder sentHolder = (SentViewHolder) holder;
+            sentHolder.tvText.setText(message.getText());
+            sentHolder.tvTime.setText(timeStr);
+            bindImage(sentHolder.ivImage, sentHolder.tvText, message);
         } else if (holder instanceof ReceivedViewHolder) {
-            ((ReceivedViewHolder) holder).tvName.setText(message.getSenderName());
-            ((ReceivedViewHolder) holder).tvText.setText(message.getText());
-            ((ReceivedViewHolder) holder).tvTime.setText(timeStr);
+            ReceivedViewHolder receivedHolder = (ReceivedViewHolder) holder;
+            receivedHolder.tvName.setText(message.getSenderName());
+            receivedHolder.tvText.setText(message.getText());
+            receivedHolder.tvTime.setText(timeStr);
+            bindImage(receivedHolder.ivImage, receivedHolder.tvText, message);
+        }
+    }
+
+    private void bindImage(ImageView ivImage, TextView tvText, Message message) {
+        if (message.getImageUrl() != null) {
+            // Es un mensaje de imagen
+            ivImage.setVisibility(View.VISIBLE);
+            tvText.setVisibility(View.GONE);
+            Glide.with(ivImage.getContext())
+                    .load(message.getImageUrl())
+                    .into(ivImage);
+
+            ivImage.setOnClickListener(v -> {
+                if (imageClickListener != null) {
+                    imageClickListener.onImageClick(message.getImageUrl());
+                }
+            });
+        } else {
+            // Es un mensaje de texto normal, hay que limpiar el estado reciclado
+            ivImage.setVisibility(View.GONE);
+            tvText.setVisibility(View.VISIBLE);
+
+            ivImage.setOnClickListener(null);
         }
     }
 
@@ -76,22 +107,32 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return messages.size();
     }
 
+    public interface OnImageClickListener {
+        void onImageClick(String imageUrl);
+    }
+
     static class SentViewHolder extends RecyclerView.ViewHolder {
         TextView tvText, tvTime;
+        ImageView ivImage;
+
         SentViewHolder(View itemView) {
             super(itemView);
             tvText = itemView.findViewById(R.id.tvMessageText);
             tvTime = itemView.findViewById(R.id.tvMessageTime);
+            ivImage = itemView.findViewById(R.id.ivMessageImage);
         }
     }
 
     static class ReceivedViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvText, tvTime;
+        ImageView ivImage;
+
         ReceivedViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvSenderName);
             tvText = itemView.findViewById(R.id.tvMessageText);
             tvTime = itemView.findViewById(R.id.tvMessageTime);
+            ivImage = itemView.findViewById(R.id.ivMessageImage);
         }
     }
 }
