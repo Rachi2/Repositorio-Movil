@@ -10,18 +10,23 @@ import com.example.proyecto1.data.repository.AuthRepositoryImpl;
 import com.example.proyecto1.data.repository.UserRepositoryImpl;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.ChatRepository;
+import com.example.proyecto1.domain.usecase.FilterUsersUseCase;
 import com.example.proyecto1.domain.usecase.GetUsersUseCase;
 import com.example.proyecto1.domain.usecase.LogoutUseCase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersViewModel extends ViewModel {
     private final GetUsersUseCase getUsersUseCase;
     private final LogoutUseCase logoutUseCase;
+    private final FilterUsersUseCase filterUsersUseCase;
     private final MutableLiveData<List<User>> users = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loggedOut = new MutableLiveData<>();
+    private List<User> allUsers = new ArrayList<>();
+    private String currentQuery = "";
 
     public UsersViewModel() {
         FirebaseAuthSource firebaseSource = new FirebaseAuthSource();
@@ -32,6 +37,7 @@ public class UsersViewModel extends ViewModel {
 
         this.getUsersUseCase = new GetUsersUseCase(userRepository, authRepository);
         this.logoutUseCase = new LogoutUseCase(authRepository);
+        this.filterUsersUseCase = new FilterUsersUseCase();
     }
 
     public LiveData<List<User>> getUsers() {
@@ -56,7 +62,8 @@ public class UsersViewModel extends ViewModel {
             @Override
             public void onSuccess(List<User> result) {
                 loading.setValue(false);
-                users.setValue(result);
+                allUsers = result;
+                applyFilter();
             }
 
             @Override
@@ -72,5 +79,18 @@ public class UsersViewModel extends ViewModel {
     public void logout() {
         logoutUseCase.execute();
         loggedOut.setValue(true);
+    }
+
+    public boolean isSearching() {
+        return currentQuery != null && !currentQuery.trim().isEmpty();
+    }
+
+    public void search(String query) {
+        this.currentQuery = query;
+        applyFilter();
+    }
+
+    private void applyFilter() {
+        users.setValue(filterUsersUseCase.execute(allUsers, currentQuery));
     }
 }
