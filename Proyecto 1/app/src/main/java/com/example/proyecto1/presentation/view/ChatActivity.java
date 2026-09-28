@@ -1,5 +1,6 @@
 package com.example.proyecto1.presentation.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -65,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
         viewModel.initConversation(otherUserId);
 
         // El adapter necesita el id del usuario actual para saber qué mensajes van a la derecha
-        adapter = new MessageAdapter(viewModel.getCurrentUserId());
+        adapter = new MessageAdapter(viewModel.getCurrentUserId(), this::openImage);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         binding.rvMessages.setLayoutManager(layoutManager);
@@ -103,5 +104,11 @@ public class ChatActivity extends AppCompatActivity {
                 new PickVisualMediaRequest.Builder()
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                         .build()));
+    }
+
+    private void openImage(String imageUrl) {
+        Intent intent = new Intent(this, ImageViewerActivity.class);
+        intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, imageUrl);
+        startActivity(intent);
     }
 }

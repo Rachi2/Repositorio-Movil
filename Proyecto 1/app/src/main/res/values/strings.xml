@@ -29,4 +29,5 @@
     <string name="chat_open_error">No se pudo abrir el chat</string>
     <string name="image_description">Imagen enviada</string>
     <string name="attach_description">Adjuntar imagen</string>
+    <string name="close_description">Cerrar</string>
 </resources>
