@@ -76,7 +76,8 @@ public class UsersActivity extends AppCompatActivity {
 
     private void openChat(User user) {
         Intent intent = new Intent(UsersActivity.this, ChatActivity.class);
-        intent.putExtra("OTHER_USER_ID", user.getId()).putExtra("OTHER_USER_NAME", user.getName());
+        intent.putExtra(ChatActivity.EXTRA_USER_ID, user.getId())
+                .putExtra(ChatActivity.EXTRA_USER_NAME, user.getName());
         startActivity(intent);
     }
 
