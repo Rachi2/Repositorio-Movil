@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="Escribe un mensaje..."
+            android:hint="@string/chat_hint"
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:padding="12dp"
@@ -58,7 +58,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Enviar"
+            android:contentDescription="@string/chat_send"
             android:src="@android:drawable/ic_menu_send"
             app:tint="@color/cherry_bright" />
     </LinearLayout>
