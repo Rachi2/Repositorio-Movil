@@ -3,6 +3,9 @@ package com.example.proyecto1.presentation.view;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,6 +26,15 @@ public class ChatActivity extends AppCompatActivity {
     private ActivityChatBinding binding;
     private ChatViewModel viewModel;
     private MessageAdapter adapter;
+
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickImage = registerForActivityResult(
+            new ActivityResultContracts.PickMultipleVisualMedia(), uri ->{
+                if(uri != null){
+                    //to do
+                    Toast.makeText(this, "Imagen elegida", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,5 +88,10 @@ public class ChatActivity extends AppCompatActivity {
             viewModel.sendMessage(binding.etMessage.getText().toString());
             binding.etMessage.setText("");
         });
+
+        binding.btnAttach.setOnClickListener(v -> pickImage.launch(
+                new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()));
     }
 }

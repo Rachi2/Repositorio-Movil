@@ -40,6 +40,15 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
+        <ImageButton
+            android:id="@+id/btnAttach"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/Attach_Description"
+            app:tint="@color/cherry_bright" />
+
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="0dp"
