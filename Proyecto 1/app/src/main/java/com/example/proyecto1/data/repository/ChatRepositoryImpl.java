@@ -1,7 +1,10 @@
 package com.example.proyecto1.data.repository;
 
+import android.net.Uri;
+
 import com.example.proyecto1.data.model.MessageDto;
 import com.example.proyecto1.data.remote.FirestoreChatSource;
+import com.example.proyecto1.data.remote.StorageSource;
 import com.example.proyecto1.domain.model.Message;
 import com.example.proyecto1.domain.repository.ChatRepository;
 
@@ -11,9 +14,11 @@ import java.util.List;
 public class ChatRepositoryImpl implements ChatRepository {
 
     private final FirestoreChatSource chatSource;
+    private final StorageSource storage;
 
-    public ChatRepositoryImpl(FirestoreChatSource chatSource) {
+    public ChatRepositoryImpl(FirestoreChatSource chatSource, StorageSource storage) {
         this.chatSource = chatSource;
+        this.storage = storage;
     }
 
     @Override
@@ -23,8 +28,9 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public void sendImage(String conversationId, String imageUri, RepositoryCallback<Void> callback) {
-        // Se implementara en la fase 3
+    public void uploadImage(String conversationId, String imageUri, RepositoryCallback<String> callback) {
+        Uri uri = Uri.parse(imageUri);
+        storage.uploadImage(conversationId, uri, callback);
     }
 
     @Override

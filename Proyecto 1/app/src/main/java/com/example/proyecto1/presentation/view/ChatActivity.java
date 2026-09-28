@@ -1,6 +1,7 @@
 package com.example.proyecto1.presentation.view;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,16 +26,15 @@ public class ChatActivity extends AppCompatActivity {
 
     private ActivityChatBinding binding;
     private ChatViewModel viewModel;
-    private MessageAdapter adapter;
-
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImage = registerForActivityResult(
-            new ActivityResultContracts.PickMultipleVisualMedia(), uri ->{
-                if(uri != null){
-                    //to do
-                    Toast.makeText(this, "Imagen elegida", Toast.LENGTH_SHORT).show();
+            new ActivityResultContracts.PickVisualMedia(), uri -> {
+                if (uri != null) {
+                    viewModel.sendImage(uri.toString());
                 }
             }
     );
+
+    private MessageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +81,16 @@ public class ChatActivity extends AppCompatActivity {
 
         viewModel.getError().observe(this, error -> {
             if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.getUploading().observe(this, isUploading -> {
+            if (isUploading) {
+                binding.progressUpload.setVisibility(View.VISIBLE);
+                binding.btnAttach.setEnabled(false);
+            } else {
+                binding.progressUpload.setVisibility(View.GONE);
+                binding.btnAttach.setEnabled(true);
+            }
         });
 
         // SendMessageUseCase ya evita enviar mensajes vacíos
