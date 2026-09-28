@@ -17,4 +17,9 @@
     <string name="hint_confirm_password">Confirmar contraseña</string>
     <string name="btn_register">Registrarse</string>
     <string name="go_to_login">¿Ya tienes cuenta? Inicia sesión</string>
+
+    <!-- Lista de usuarios -->
+    <string name="users_title">Chats</string>
+    <string name="users_empty">No hay otros usuarios todavía</string>
+    <string name="action_logout">Cerrar sesión</string>
 </resources>

@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.proyecto1.MainActivity;
 import com.example.proyecto1.databinding.ActivityLoginBinding;
 import com.example.proyecto1.presentation.viewmodel.AuthViewModel;
 
@@ -48,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         viewModel.getUser().observe(this, user -> {
             if (user != null) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, UsersActivity.class);
                 startActivity(intent);
                 finish();
             }
