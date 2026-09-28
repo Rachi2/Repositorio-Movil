@@ -1,9 +1,13 @@
 package com.example.proyecto1.presentation.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.example.proyecto1.data.local.ImageCompressor;
 import com.example.proyecto1.data.remote.FirebaseAuthSource;
 import com.example.proyecto1.data.remote.FirestoreChatSource;
 import com.example.proyecto1.data.remote.FirestoreUserSource;
@@ -22,7 +26,7 @@ import com.example.proyecto1.domain.usecase.SendMessageUseCase;
 
 import java.util.List;
 
-public class ChatViewModel extends ViewModel {
+public class ChatViewModel extends AndroidViewModel {
 
     private final SendMessageUseCase sendMessageUseCase;
     private final GetMessagesUseCase getMessagesUseCase;
@@ -39,9 +43,10 @@ public class ChatViewModel extends ViewModel {
     private String currentUserId;
     private String currentUserName;
 
-    // Constructor vacío: así la Activity puede usar ViewModelProvider
-    public ChatViewModel() {
-        ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(new FirestoreChatSource(), new StorageSource());
+
+    public ChatViewModel(@NonNull Application application) {
+        super(application);
+        ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(new FirestoreChatSource(), new StorageSource(), new ImageCompressor(application));
         AuthRepositoryImpl authRepository = new AuthRepositoryImpl(new FirebaseAuthSource());
         UserRepositoryImpl userRepository = new UserRepositoryImpl(new FirestoreUserSource());
 
@@ -140,14 +145,6 @@ public class ChatViewModel extends ViewModel {
         });
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        if (listenerRegistration != null) {
-            listenerRegistration.remove();
-        }
-    }
-
     public void sendImage(String imageUri) {
         if (conversationId == null) {
             return;
@@ -165,5 +162,13 @@ public class ChatViewModel extends ViewModel {
                 _error.setValue(e.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (listenerRegistration != null) {
+            listenerRegistration.remove();
+        }
     }
 }
