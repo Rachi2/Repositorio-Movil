@@ -12,4 +12,5 @@
     <color name="cherry_glow">#4A0E17</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#9E8B93</color>
+    <color name="cursor_color">#E63946</color>
 </resources>

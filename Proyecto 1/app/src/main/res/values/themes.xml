@@ -1,8 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Proyecto1" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Colores base de Material 3 para eliminar el morado -->
+        <item name="colorPrimary">#800020</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#E63946</item>
+        <item name="colorAccent">#E63946</item>
+        <item name="colorControlActivated">#E63946</item>
+
+        <!-- Aplica el estilo personalizado de los campos de texto a toda la app -->
+        <item name="editTextStyle">@style/CustomEditTextStyle</item>
+    </style>
+
+    <!-- Estilo para forzar el cursor y selección en rojo/borgoña -->
+    <style name="CustomEditTextStyle" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textColorHighlight">#40E63946</item>
     </style>
 
     <style name="Theme.Proyecto1" parent="Base.Theme.Proyecto1" />

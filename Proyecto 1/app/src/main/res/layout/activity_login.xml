@@ -63,6 +63,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
+                android:textCursorDrawable="@drawable/cursor_red"
+                android:textColorHighlight="#40E63946"
+                android:importantForAutofill="no"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +88,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
+                android:textCursorDrawable="@drawable/cursor_red"
+                android:textColorHighlight="#40E63946"
+                android:importantForAutofill="no"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
