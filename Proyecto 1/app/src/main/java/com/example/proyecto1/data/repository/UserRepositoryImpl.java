@@ -71,4 +71,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void updatePhotoUrl(String userId, String photoUrl, ChatRepository.RepositoryCallback<Void> callback) {
         firestoreUserSource.updatePhotoUrl(userId, photoUrl, callback);
     }
+
+    @Override
+    public void updateFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback) {
+        firestoreUserSource.updateFcmToken(userId, token, callback);
+    }
 }

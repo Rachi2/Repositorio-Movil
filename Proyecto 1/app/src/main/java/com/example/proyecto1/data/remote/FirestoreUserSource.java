@@ -50,4 +50,12 @@ public class FirestoreUserSource {
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onError);
     }
+
+    public void updateFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback) {
+        db.collection("users")
+                .document(userId)
+                .update("fcmToken", token)
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onError);
+    }
 }

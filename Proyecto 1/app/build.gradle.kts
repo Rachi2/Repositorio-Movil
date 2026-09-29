@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-messaging")
     implementation(libs.activity.ktx)
     implementation(libs.annotation)
     implementation(libs.appcompat)
