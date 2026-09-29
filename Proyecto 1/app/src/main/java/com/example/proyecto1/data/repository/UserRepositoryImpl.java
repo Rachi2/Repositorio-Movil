@@ -63,11 +63,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void saveFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback) {
-        // Se implementara en la Fase 4 (Notificaciones FCM)
-    }
-
-    @Override
     public void updatePhotoUrl(String userId, String photoUrl, ChatRepository.RepositoryCallback<Void> callback) {
         firestoreUserSource.updatePhotoUrl(userId, photoUrl, callback);
     }
