@@ -11,7 +11,6 @@ public interface UserRepository {
     // Métodos que se utilizarán en la Fase 2 (Lista de usuarios)
     void getUsers(ChatRepository.RepositoryCallback<List<User>> callback);
     void getUserById(String userId, ChatRepository.RepositoryCallback<User> callback);
-    void saveFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback);
     void updatePhotoUrl(String id, String photoUrl, ChatRepository.RepositoryCallback<Void> callback);
     void updateFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback);
 }

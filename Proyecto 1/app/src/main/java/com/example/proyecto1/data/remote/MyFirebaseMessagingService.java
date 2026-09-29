@@ -9,10 +9,13 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
 import com.example.proyecto1.R;
 import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.presentation.view.ChatActivity;
+import com.example.proyecto1.presentation.view.UsersActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,29 +28,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
 
-        String title = message.getNotification() != null ? message.getNotification().getTitle() : "Nuevo mensaje";
-        String body = message.getNotification() != null ? message.getNotification().getBody() : "";
+        String senderId = message.getData().get("senderId");
+        String senderName = message.getData().get("senderName");
+        String body = message.getData().get("body");
+        if (senderId == null) return;
 
-        showNotification(title, body);
+        showNotification(senderId, senderName, body);
     }
 
     @Override
-    public void onNewToken(@NonNull String token) {
-        super.onNewToken(token);
+    public void onRegistered(@NonNull String installationId) {
+        super.onRegistered(installationId);
         String currentUserId = FirebaseAuth.getInstance().getUid();
-        if (currentUserId != null) {
-            new FirestoreUserSource().updateFcmToken(currentUserId, token, new ChatRepository.RepositoryCallback<Void>() {
-                @Override
-                public void onSuccess(Void result) {}
+        if (currentUserId == null) return;
 
-                @Override
-                public void onError(Exception e) {}
-            });
-        }
+        new FirestoreUserSource().updateFcmToken(currentUserId, installationId,
+                new ChatRepository.RepositoryCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // Identificador guardado
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Si falla, se vuelve a intentar la próxima vez que se abra la lista
+                    }
+                });
     }
 
-    private void showNotification(String title, String message) {
+    private void showNotification(String senderId, String senderName, String body) {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager == null) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -55,27 +66,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     "Notificaciones de Chat",
                     NotificationManager.IMPORTANCE_HIGH
             );
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
+            manager.createNotificationChannel(channel);
         }
 
-        Intent intent = new Intent(this, ChatActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
-        );
+        Intent chatIntent = new Intent(this, ChatActivity.class);
+        chatIntent.putExtra(ChatActivity.EXTRA_USER_ID, senderId);
+        chatIntent.putExtra(ChatActivity.EXTRA_USER_NAME, senderName);
+
+        // Un código por persona: si Ana envía 3 mensajes, se actualiza la misma notificación
+        int notificationId = senderId.hashCode();
+
+        PendingIntent pendingIntent = TaskStackBuilder.create(this)
+                .addNextIntent(new Intent(this, UsersActivity.class))
+                .addNextIntent(chatIntent)
+                .getPendingIntent(notificationId,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(this, R.color.cherry_bright))
+                .setContentTitle(senderName)
+                .setContentText(body)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
-        if (manager != null) {
-            manager.notify((int) System.currentTimeMillis(), builder.build());
-        }
+        manager.notify(notificationId, builder.build());
     }
 }
