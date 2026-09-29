@@ -1,8 +1,8 @@
 package com.example.proyecto1.data.remote;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.proyecto1.data.model.UserDto;
 import com.example.proyecto1.domain.repository.ChatRepository;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class FirestoreUserSource {
                 .addOnFailureListener(callback::onError);
     }
 
-    public void getUsers(ChatRepository.RepositoryCallback<List<UserDto>> callback){
+    public void getUsers(ChatRepository.RepositoryCallback<List<UserDto>> callback) {
         db.collection("users")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -32,14 +32,22 @@ public class FirestoreUserSource {
                 .addOnFailureListener(callback::onError);
     }
 
-    public void getUserById(String id, ChatRepository.RepositoryCallback<UserDto> callback){
+    public void getUserById(String id, ChatRepository.RepositoryCallback<UserDto> callback) {
         db.collection("users")
                 .document(id)
                 .get()
-                .addOnSuccessListener(documentSnapshot ->{
+                .addOnSuccessListener(documentSnapshot -> {
                     UserDto userDto = documentSnapshot.toObject(UserDto.class);
                     callback.onSuccess(userDto);
                 })
+                .addOnFailureListener(callback::onError);
+    }
+
+    public void updatePhotoUrl(String id, String photoUrl, ChatRepository.RepositoryCallback<Void> callback) {
+        db.collection("users")
+                .document(id)
+                .update("photoUrl", photoUrl)
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(callback::onError);
     }
 }

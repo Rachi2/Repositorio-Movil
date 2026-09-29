@@ -9,6 +9,12 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
+    <item
+        android:id="@+id/action_profile"
+        android:title="@string/action_profile"
+        app:showAsAction="never" />
+
+
     <!-- Aparece en los 3 puntitos de la barra -->
     <item
         android:id="@+id/action_logout"

@@ -33,4 +33,17 @@
     <string name="action_search">Buscar</string>
     <string name="search_hint">Buscar por nombre o correo</string>
     <string name="search_no_results">No se encontraron usuarios</string>
+
+    <!-- Perfil -->
+    <string name="action_profile">Mi perfil</string>
+    <string name="profile_title">Mi perfil</string>
+    <string name="btn_change_photo">Cambiar foto</string>
+    <string name="profile_photo_description">Foto de perfil</string>
+    <string name="photo_updated">Foto actualizada</string>
+
+    <!-- Recorte de foto -->
+    <string name="crop_title">Ajustar foto</string>
+    <string name="btn_crop_confirm">Listo</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="crop_error">No se pudo recortar la imagen</string>
 </resources>

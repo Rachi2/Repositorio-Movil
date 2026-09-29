@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Una fila de la lista. OJO: alto en wrap_content, si no cada fila ocupa toda la pantalla -->
+<?xml version="1.0" encoding="utf-8"?><!-- Una fila de la lista. OJO: alto en wrap_content, si no cada fila ocupa toda la pantalla -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,17 +9,30 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="12dp">
 
-    <!-- Círculo con la inicial del nombre -->
-    <TextView
-        android:id="@+id/tvInitial"
+    <!-- Avatar: la inicial de fondo y la foto encima (si el usuario tiene) -->
+    <FrameLayout
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/bg_circle_initial"
-        android:gravity="center"
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="A" />
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/tvInitial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_circle_initial"
+            android:gravity="center"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="A" />
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/profile_photo_description"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <!-- Nombre y correo, uno debajo del otro -->
     <LinearLayout

@@ -3,11 +3,13 @@ package com.example.proyecto1.presentation.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.proyecto1.R;
 import com.example.proyecto1.domain.model.User;
 
@@ -41,12 +43,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         holder.tvName.setText(user.getName());
         holder.tvEmail.setText(user.getEmail());
+        holder.tvInitial.setText(AvatarUtils.getInitial(user.getName()));
 
-        String name = user.getName();
-        if (name == null || name.trim().isEmpty()) {
-            holder.tvInitial.setText("?");
+        if (user.getPhotoUrl() != null) {
+            holder.ivAvatar.setVisibility(View.VISIBLE);
+            Glide.with(holder.itemView).load(user.getPhotoUrl()).circleCrop().into(holder.ivAvatar);
         } else {
-            holder.tvInitial.setText(name.trim().substring(0, 1).toUpperCase());
+            holder.ivAvatar.setVisibility(View.GONE);
+            Glide.with(holder.itemView).clear(holder.ivAvatar);
         }
 
         holder.itemView.setOnClickListener(v -> listener.onUserClick(user));
@@ -65,12 +69,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         TextView tvInitial;
         TextView tvName;
         TextView tvEmail;
+        ImageView ivAvatar;
 
         public UserViewHolder(View itemView) {
             super(itemView);
             tvInitial = itemView.findViewById(R.id.tvInitial);
             tvName = itemView.findViewById(R.id.tvName);
             tvEmail = itemView.findViewById(R.id.tvEmail);
+            ivAvatar = itemView.findViewById(R.id.ivAvatar);
         }
     }
 }
