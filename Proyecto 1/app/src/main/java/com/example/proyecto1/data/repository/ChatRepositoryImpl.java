@@ -36,7 +36,8 @@ public class ChatRepositoryImpl implements ChatRepository {
         compressor.compress(uri, new RepositoryCallback<byte[]>() {
             @Override
             public void onSuccess(byte[] result) {
-                storage.uploadImage(conversationId, result, callback);
+                String path = "chat_images/" + conversationId + "/" + System.currentTimeMillis() + ".jpg";
+                storage.uploadImage(path, result, callback);
             }
 
             @Override

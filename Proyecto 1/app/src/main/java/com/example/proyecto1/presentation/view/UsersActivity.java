@@ -91,6 +91,7 @@ public class UsersActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_users, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        assert searchView != null;
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -111,6 +112,10 @@ public class UsersActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_logout) {
             viewModel.logout();
+            return true;
+        } else if (item.getItemId() == R.id.action_profile) {
+            Intent intent = new Intent(UsersActivity.this, ProfileActivity.class);
+            startActivity(intent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

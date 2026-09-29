@@ -12,12 +12,9 @@ public class StorageSource {
         this.storage = FirebaseStorage.getInstance();
     }
 
-    public void uploadImage(String conversationId, byte[] imageData, ChatRepository.RepositoryCallback<String> callback) {
+    public void uploadImage(String path, byte[] imageData, ChatRepository.RepositoryCallback<String> callback) {
 
-        // Ruta para guardar la foto, actualmente esta con el id de la conversacion y el tiempo
-        StorageReference ref = storage.getReference()
-                .child("chat_images/" + conversationId + "/" +
-                        System.currentTimeMillis() + ".jpg");
+        StorageReference ref = storage.getReference().child(path);
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setContentType("image/jpeg")

@@ -39,6 +39,14 @@
         <activity
             android:name=".presentation.view.ImageViewerActivity"
             android:exported="false"/>
+
+        <activity
+            android:name=".presentation.view.ProfileActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".presentation.view.CropPhotoActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

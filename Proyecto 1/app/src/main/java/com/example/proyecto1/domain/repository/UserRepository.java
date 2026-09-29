@@ -12,4 +12,5 @@ public interface UserRepository {
     void getUsers(ChatRepository.RepositoryCallback<List<User>> callback);
     void getUserById(String userId, ChatRepository.RepositoryCallback<User> callback);
     void saveFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback);
+    void updatePhotoUrl(String id, String photoUrl, ChatRepository.RepositoryCallback<Void> callback);
 }

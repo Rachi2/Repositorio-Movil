@@ -54,4 +54,5 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.github.bumptech.glide:glide:5.0.9")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation("com.vanniktech:android-image-cropper:4.7.0")
 }
