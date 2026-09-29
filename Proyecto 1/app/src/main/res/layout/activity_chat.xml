@@ -5,10 +5,10 @@
     android:id="@+id/chatRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
+    android:background="@drawable/bg_grandient_glow"
     tools:context=".presentation.view.ChatActivity">
 
-    <!-- Barra Superior / Header -->
+    <!-- Header -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             tools:text="Usuario Chat" />
     </LinearLayout>
 
-    <!-- Barra de envío abajo -->
+    <!-- Barra de envo abajo -->
     <LinearLayout
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"

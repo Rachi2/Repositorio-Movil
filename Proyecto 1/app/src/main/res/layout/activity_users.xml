@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
+    android:background="@drawable/bg_gradient_glow_low"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".presentation.view.UsersActivity">
 
-    <!-- Barra superior con el título y el menú de cerrar sesión -->
+    <!-- Barra superior con el titulo y el menu de cerrar sesion -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/card_bg"
+        android:background="@android:color/transparent"
         android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
         app:title="@string/users_title"
         app:titleTextColor="@color/text_primary" />
@@ -43,7 +43,7 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <!-- Mensaje cuando la lista está vacía -->
+        <!-- Mensaje cuando la lista esta vacia -->
         <TextView
             android:id="@+id/tvEmpty"
             android:layout_width="wrap_content"

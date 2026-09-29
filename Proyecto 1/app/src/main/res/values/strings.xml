@@ -4,7 +4,7 @@
 
     <!-- Strings del Login -->
     <string name="login_title">Iniciar sesión</string>
-    <string name="login_subtitle">Bienvenido de nuevo</string>
+    <string name="login_subtitle">¡Bienvenido!</string>
     <string name="hint_email">Correo electrónico</string>
     <string name="hint_password">Contraseña</string>
     <string name="btn_login">Entrar</string>

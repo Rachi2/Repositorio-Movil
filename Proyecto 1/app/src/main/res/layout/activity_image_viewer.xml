@@ -6,7 +6,7 @@
     android:id="@+id/viewerRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/bg_gradient_glow_low"
     tools:context=".presentation.view.ImageViewerActivity">
 
     <!-- PhotoView: un ImageView que ya trae zoom con dos dedos y doble toque -->
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/image_description" />
 
-    <!-- Botón para cerrar, arriba a la izquierda (encima de la foto) -->
+    <!-- Boton para cerrar, arriba a la izquierda (encima de la foto) -->
     <ImageButton
         android:id="@+id/btnClose"
         android:layout_width="48dp"

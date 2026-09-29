@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/bg_gradient_glow_low"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".presentation.view.CropPhotoActivity">
@@ -17,7 +17,7 @@
         app:title="@string/crop_title"
         app:titleTextColor="@color/text_primary" />
 
-    <!-- El componente de la librería: muestra la foto con la guía de recorte -->
+    <!-- El componente de la librera: muestra la foto con la guia de recorte -->
     <com.canhub.cropper.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
@@ -41,11 +41,15 @@
             android:text="@string/btn_cancel"
             android:textColor="@color/text_secondary" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/btn_crop_confirm" />
+            android:text="@string/btn_crop_confirm"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:backgroundTint="#800020"
+            app:cornerRadius="24dp" />
     </LinearLayout>
 </LinearLayout>
