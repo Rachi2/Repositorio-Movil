@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -51,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                     @Override
                     public void onError(Exception e) {
-                        // Si falla, se vuelve a intentar la próxima vez que se abra la lista
+                        Log.e("FCM", "No se pudo guardar el identificador", e);
                     }
                 });
     }
