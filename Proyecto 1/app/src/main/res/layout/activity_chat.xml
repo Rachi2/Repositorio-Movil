@@ -29,7 +29,7 @@
             tools:text="Usuario Chat" />
     </LinearLayout>
 
-    <!-- Barra de envo abajo -->
+    <!-- Barra de envio abajo -->
     <LinearLayout
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
@@ -66,6 +66,7 @@
             android:maxLines="4"
             android:padding="12dp"
             android:textColor="@color/text_primary"
+            android:textCursorDrawable="@drawable/cursor_red"
             android:textColorHint="@color/text_secondary" />
 
         <ImageButton
