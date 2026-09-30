@@ -70,12 +70,38 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             sentHolder.tvText.setText(message.getText());
             sentHolder.tvTime.setText(timeStr);
             bindImage(sentHolder.ivImage, sentHolder.tvText, message);
+            bindDateHeader(sentHolder.tvDateHeader, position);
         } else if (holder instanceof ReceivedViewHolder) {
             ReceivedViewHolder receivedHolder = (ReceivedViewHolder) holder;
             receivedHolder.tvName.setText(message.getSenderName());
             receivedHolder.tvText.setText(message.getText());
             receivedHolder.tvTime.setText(timeStr);
             bindImage(receivedHolder.ivImage, receivedHolder.tvText, message);
+            bindDateHeader(receivedHolder.tvDateHeader, position);
+        }
+    }
+
+    private void bindDateHeader(TextView tvDateHeader, int position) {
+        boolean showHeader = false;
+
+        if (position == 0) {
+            // Es el primer mensaje de la lista
+            showHeader = true;
+        } else {
+            long currentTimestamp = messages.get(position).getTimestamp();
+            long previousTimestamp = messages.get(position - 1).getTimestamp();
+
+            // Muestra la cabecera si el mensaje anterior es de un dia distinto
+            if (!DateUtils.isSameDay(currentTimestamp, previousTimestamp)) {
+                showHeader = true;
+            }
+        }
+
+        if (showHeader) {
+            tvDateHeader.setText(DateUtils.formatDayHeader(messages.get(position).getTimestamp()));
+            tvDateHeader.setVisibility(View.VISIBLE);
+        } else {
+            tvDateHeader.setVisibility(View.GONE);
         }
     }
 
@@ -112,19 +138,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     static class SentViewHolder extends RecyclerView.ViewHolder {
-        TextView tvText, tvTime;
+        TextView tvText, tvTime, tvDateHeader;
         ImageView ivImage;
 
         SentViewHolder(View itemView) {
             super(itemView);
             tvText = itemView.findViewById(R.id.tvMessageText);
             tvTime = itemView.findViewById(R.id.tvMessageTime);
+            tvDateHeader = itemView.findViewById(R.id.tvDateHeader);
             ivImage = itemView.findViewById(R.id.ivMessageImage);
         }
     }
 
     static class ReceivedViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvText, tvTime;
+        TextView tvName, tvText, tvTime, tvDateHeader;
         ImageView ivImage;
 
         ReceivedViewHolder(View itemView) {
@@ -132,6 +159,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvName = itemView.findViewById(R.id.tvSenderName);
             tvText = itemView.findViewById(R.id.tvMessageText);
             tvTime = itemView.findViewById(R.id.tvMessageTime);
+            tvDateHeader = itemView.findViewById(R.id.tvDateHeader);
             ivImage = itemView.findViewById(R.id.ivMessageImage);
         }
     }
