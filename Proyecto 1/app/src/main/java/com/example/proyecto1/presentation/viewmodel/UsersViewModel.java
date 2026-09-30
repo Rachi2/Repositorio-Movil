@@ -43,7 +43,7 @@ public class UsersViewModel extends ViewModel {
         this.getUsersUseCase = new GetUsersUseCase(userRepository, authRepository);
         this.logoutUseCase = new LogoutUseCase(authRepository);
         this.filterUsersUseCase = new FilterUsersUseCase();
-        this.registerDeviceUseCase = new RegisterDeviceUseCase(authRepository, notificationRepository);
+        this.registerDeviceUseCase = new RegisterDeviceUseCase(authRepository, notificationRepository, userRepository);
 
         registerDeviceUseCase.execute(new ChatRepository.RepositoryCallback<Void>() {
             @Override

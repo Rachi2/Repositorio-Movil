@@ -12,7 +12,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
-    public void registerDevice(ChatRepository.RepositoryCallback<Void> callback) {
+    public void registerDevice(ChatRepository.RepositoryCallback<String> callback) {
         source.register(callback);
     }
 }
