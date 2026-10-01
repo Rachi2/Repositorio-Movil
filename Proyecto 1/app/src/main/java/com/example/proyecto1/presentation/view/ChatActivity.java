@@ -24,7 +24,8 @@ public class ChatActivity extends AppCompatActivity {
     // Claves para recibir los datos del otro usuario desde UsersActivity
     public static final String EXTRA_USER_ID = "OTHER_USER_ID";
     public static final String EXTRA_USER_NAME = "OTHER_USER_NAME";
-
+    public static String openChatUserId = null;
+    private String otherUserId;
     private ActivityChatBinding binding;
     private ChatViewModel viewModel;
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImage = registerForActivityResult(
@@ -51,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // Lee los datos pasados desde el Intent
-        String otherUserId = getIntent().getStringExtra(EXTRA_USER_ID);
+        otherUserId = getIntent().getStringExtra(EXTRA_USER_ID);
         String otherUserName = getIntent().getStringExtra(EXTRA_USER_NAME);
 
         if (otherUserId == null) {
@@ -104,6 +105,18 @@ public class ChatActivity extends AppCompatActivity {
                 new PickVisualMediaRequest.Builder()
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                         .build()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openChatUserId = otherUserId;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        openChatUserId = null;
     }
 
     private void openImage(String imageUrl) {

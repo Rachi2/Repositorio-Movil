@@ -33,6 +33,7 @@
     <string name="action_search">Buscar</string>
     <string name="search_hint">Buscar por nombre o correo</string>
     <string name="search_no_results">No se encontraron usuarios</string>
+    <string name="in_app_notification_description">Nuevo mensaje</string>
 
     <!-- Perfil -->
     <string name="action_profile">Mi perfil</string>

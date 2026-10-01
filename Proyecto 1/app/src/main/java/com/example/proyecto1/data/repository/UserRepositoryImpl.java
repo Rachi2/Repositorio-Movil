@@ -71,4 +71,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback) {
         firestoreUserSource.updateFcmToken(userId, token, callback);
     }
+
+    @Override
+    public void clearFcmTokenIfMatches(String userId, String deviceId, ChatRepository.RepositoryCallback<Void> callback) {
+        firestoreUserSource.clearFcmTokenIfMatches(userId, deviceId, callback);
+    }
 }

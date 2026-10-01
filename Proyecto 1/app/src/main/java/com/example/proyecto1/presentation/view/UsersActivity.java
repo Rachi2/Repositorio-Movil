@@ -74,7 +74,6 @@ public class UsersActivity extends AppCompatActivity {
             }
         });
 
-        // Pedir el permiso de notificaciones en Android 13 o superior (Fase 4)
         checkNotificationPermission();
     }
 
@@ -90,6 +89,7 @@ public class UsersActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         viewModel.loadUsers();
+        viewModel.registerDevice();
     }
 
     private void openChat(User user) {

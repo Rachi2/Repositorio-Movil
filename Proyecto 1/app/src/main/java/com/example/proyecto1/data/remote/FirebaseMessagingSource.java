@@ -11,4 +11,10 @@ public class FirebaseMessagingSource {
                 .addOnSuccessListener(callback::onSuccess)
                 .addOnFailureListener(callback::onError);
     }
+
+    public void getDeviceId(ChatRepository.RepositoryCallback<String> callback) {
+        FirebaseInstallations.getInstance().getId()
+                .addOnSuccessListener(callback::onSuccess)
+                .addOnFailureListener(callback::onError);
+    }
 }

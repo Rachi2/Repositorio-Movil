@@ -15,4 +15,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public void registerDevice(ChatRepository.RepositoryCallback<String> callback) {
         source.register(callback);
     }
+
+    public void getDeviceId(ChatRepository.RepositoryCallback<String> callback) {
+        source.getDeviceId(callback);
+    }
 }
