@@ -2,6 +2,7 @@ package com.example.proyecto1.data.remote;
 
 import com.example.proyecto1.data.model.UserDto;
 import com.example.proyecto1.domain.repository.ChatRepository;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -56,6 +57,22 @@ public class FirestoreUserSource {
                 .document(userId)
                 .update("fcmToken", token)
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(callback::onError);
+    }
+
+    public void clearFcmTokenIfMatches(String userId, String deviceId, ChatRepository.RepositoryCallback<Void> callback) {
+        DocumentReference ref = db.collection("users").document(userId);
+        ref.get()
+                .addOnSuccessListener(doc -> {
+                    if (deviceId.equals(doc.getString("fcmToken"))) {
+                        ref.update("fcmToken", null)
+                                .addOnSuccessListener(unused -> callback.onSuccess(null))
+                                .addOnFailureListener(callback::onError);
+                    } else {
+                        // Es de otro dispositivo: no se toca
+                        callback.onSuccess(null);
+                    }
+                })
                 .addOnFailureListener(callback::onError);
     }
 }

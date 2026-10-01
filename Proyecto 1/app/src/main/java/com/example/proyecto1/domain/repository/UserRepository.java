@@ -1,6 +1,7 @@
 package com.example.proyecto1.domain.repository;
 
 import com.example.proyecto1.domain.model.User;
+
 import java.util.List;
 
 public interface UserRepository {
@@ -10,7 +11,12 @@ public interface UserRepository {
 
     // Métodos que se utilizarán en la Fase 2 (Lista de usuarios)
     void getUsers(ChatRepository.RepositoryCallback<List<User>> callback);
+
     void getUserById(String userId, ChatRepository.RepositoryCallback<User> callback);
+
     void updatePhotoUrl(String id, String photoUrl, ChatRepository.RepositoryCallback<Void> callback);
+
     void updateFcmToken(String userId, String token, ChatRepository.RepositoryCallback<Void> callback);
+
+    void clearFcmTokenIfMatches(String userId, String deviceId, ChatRepository.RepositoryCallback<Void> callback);
 }

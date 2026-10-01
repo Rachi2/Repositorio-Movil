@@ -1,5 +1,7 @@
 package com.example.proyecto1.presentation.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -41,21 +43,11 @@ public class UsersViewModel extends ViewModel {
         NotificationRepositoryImpl notificationRepository = new NotificationRepositoryImpl(new FirebaseMessagingSource());
 
         this.getUsersUseCase = new GetUsersUseCase(userRepository, authRepository);
-        this.logoutUseCase = new LogoutUseCase(authRepository);
+        this.logoutUseCase = new LogoutUseCase(authRepository, userRepository, notificationRepository);
         this.filterUsersUseCase = new FilterUsersUseCase();
         this.registerDeviceUseCase = new RegisterDeviceUseCase(authRepository, notificationRepository, userRepository);
 
-        registerDeviceUseCase.execute(new ChatRepository.RepositoryCallback<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                // Registro pedido correctamente
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // Si falla, la app sigue funcionando; solo no llegarán notificaciones
-            }
-        });
+        registerDevice();
     }
 
     public LiveData<List<User>> getUsers() {
@@ -95,8 +87,17 @@ public class UsersViewModel extends ViewModel {
     }
 
     public void logout() {
-        logoutUseCase.execute();
-        loggedOut.setValue(true);
+        logoutUseCase.execute(new ChatRepository.RepositoryCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                loggedOut.setValue(true);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                loggedOut.setValue(true);
+            }
+        });
     }
 
     public boolean isSearching() {
@@ -110,5 +111,19 @@ public class UsersViewModel extends ViewModel {
 
     private void applyFilter() {
         users.setValue(filterUsersUseCase.execute(allUsers, currentQuery));
+    }
+
+    public void registerDevice() {
+        registerDeviceUseCase.execute(new ChatRepository.RepositoryCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                // Registro guardado
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("FCM", "No se puedo registrar el dispositivo");
+            }
+        });
     }
 }
