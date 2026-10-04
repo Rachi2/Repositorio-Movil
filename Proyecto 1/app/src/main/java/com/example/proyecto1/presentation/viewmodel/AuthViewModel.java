@@ -15,7 +15,7 @@ import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.domain.usecase.GetCurrentUserUseCase;
 import com.example.proyecto1.domain.usecase.LoginUseCase;
 import com.example.proyecto1.domain.usecase.RegisterUseCase;
-import com.example.proyecto1.domain.usecase.SaveUseCase;
+import com.example.proyecto1.domain.usecase.SaveUserUseCase;
 
 public class AuthViewModel extends ViewModel {
     private final LoginUseCase loginUseCase;
@@ -32,11 +32,11 @@ public class AuthViewModel extends ViewModel {
         UserRepositoryImpl userRepository = new UserRepositoryImpl(firestoreUserSource);
         AuthRepositoryImpl authRepository = new AuthRepositoryImpl(firebaseSource);
 
-        SaveUseCase saveUseCase = new SaveUseCase(userRepository);
+        SaveUserUseCase saveUserUseCase = new SaveUserUseCase(userRepository);
 
         this.loginUseCase = new LoginUseCase(authRepository);
         this.getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
-        this.registerUseCase = new RegisterUseCase(authRepository, saveUseCase);
+        this.registerUseCase = new RegisterUseCase(authRepository, saveUserUseCase);
     }
 
     public LiveData<Boolean> getLoading() {

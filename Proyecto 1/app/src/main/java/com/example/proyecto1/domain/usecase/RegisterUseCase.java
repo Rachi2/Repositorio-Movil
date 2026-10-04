@@ -6,11 +6,11 @@ import com.example.proyecto1.domain.repository.ChatRepository;
 
 public class RegisterUseCase {
     private final AuthRepository authRepository;
-    private final SaveUseCase saveUseCase;
+    private final SaveUserUseCase saveUserUseCase;
 
-    public RegisterUseCase(AuthRepository auth, SaveUseCase save){
+    public RegisterUseCase(AuthRepository auth, SaveUserUseCase save){
         this.authRepository = auth;
-        this.saveUseCase = save;
+        this.saveUserUseCase = save;
     }
 
     public void execute(String name, String email, String password, ChatRepository.RepositoryCallback<User> callback){
@@ -18,7 +18,7 @@ public class RegisterUseCase {
             @Override
             public void onSuccess(User result) {
                 result.setName(name);
-                saveUseCase.execute(result, new ChatRepository.RepositoryCallback<Void>() {
+                saveUserUseCase.execute(result, new ChatRepository.RepositoryCallback<Void>() {
                     @Override
                     public void onSuccess(Void v) {
                         callback.onSuccess(result);

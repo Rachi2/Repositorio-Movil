@@ -4,11 +4,11 @@ import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.domain.repository.UserRepository;
 
-public class SaveUseCase {
+public class SaveUserUseCase {
 
     private final UserRepository userRepository;
 
-    public SaveUseCase(UserRepository userRepository) {
+    public SaveUserUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
