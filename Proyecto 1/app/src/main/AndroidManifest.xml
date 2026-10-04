@@ -18,7 +18,7 @@
             android:value="true" />
 
         <service
-            android:name=".data.remote.MyFirebaseMessagingService"
+            android:name=".presentation.notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

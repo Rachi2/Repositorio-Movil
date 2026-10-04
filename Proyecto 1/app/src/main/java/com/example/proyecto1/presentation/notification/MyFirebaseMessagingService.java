@@ -1,4 +1,4 @@
-package com.example.proyecto1.data.remote;
+package com.example.proyecto1.presentation.notification;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
@@ -18,9 +18,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.proyecto1.KairoApp;
 import com.example.proyecto1.R;
+import com.example.proyecto1.data.remote.FirestoreUserSource;
 import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.presentation.view.ChatActivity;
-import com.example.proyecto1.presentation.view.InAppNotifier;
 import com.example.proyecto1.presentation.view.UsersActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;

@@ -1,4 +1,4 @@
-package com.example.proyecto1.presentation.view;
+package com.example.proyecto1.presentation.notification;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.proyecto1.R;
+import com.example.proyecto1.presentation.view.AvatarUtils;
+import com.example.proyecto1.presentation.view.ChatActivity;
 
 // Muestra el banner propio de Kairo arriba de la pantalla que esté abierta
 public class InAppNotifier {
