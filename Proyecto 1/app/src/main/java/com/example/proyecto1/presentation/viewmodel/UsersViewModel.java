@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.proyecto1.AppContainer;
 import com.example.proyecto1.data.remote.FirebaseAuthSource;
 import com.example.proyecto1.data.remote.FirebaseMessagingSource;
 import com.example.proyecto1.data.remote.FirestoreUserSource;
@@ -35,21 +36,15 @@ public class UsersViewModel extends ViewModel {
     private String currentQuery = "";
 
     public UsersViewModel() {
-        FirebaseAuthSource firebaseSource = new FirebaseAuthSource();
-        FirestoreUserSource firestoreUserSource = new FirestoreUserSource();
+        AppContainer container = AppContainer.get();
 
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(firestoreUserSource);
-        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(firebaseSource);
-        NotificationRepositoryImpl notificationRepository = new NotificationRepositoryImpl(new FirebaseMessagingSource());
-
-        this.getUsersUseCase = new GetUsersUseCase(userRepository, authRepository);
-        this.logoutUseCase = new LogoutUseCase(authRepository, userRepository, notificationRepository);
+        this.getUsersUseCase = new GetUsersUseCase(container.userRepository, container.authRepository);
+        this.logoutUseCase = new LogoutUseCase(container.authRepository, container.userRepository, container.notificationRepository);
         this.filterUsersUseCase = new FilterUsersUseCase();
-        this.registerDeviceUseCase = new RegisterDeviceUseCase(authRepository, notificationRepository, userRepository);
+        this.registerDeviceUseCase = new RegisterDeviceUseCase(container.authRepository, container.notificationRepository, container.userRepository);
 
         registerDevice();
     }
-
     public LiveData<List<User>> getUsers() {
         return users;
     }

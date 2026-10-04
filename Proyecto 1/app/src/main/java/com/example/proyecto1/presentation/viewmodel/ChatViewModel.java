@@ -1,20 +1,10 @@
 package com.example.proyecto1.presentation.viewmodel;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.example.proyecto1.data.local.ImageCompressor;
-import com.example.proyecto1.data.remote.FirebaseAuthSource;
-import com.example.proyecto1.data.remote.FirestoreChatSource;
-import com.example.proyecto1.data.remote.FirestoreUserSource;
-import com.example.proyecto1.data.remote.StorageSource;
-import com.example.proyecto1.data.repository.AuthRepositoryImpl;
-import com.example.proyecto1.data.repository.ChatRepositoryImpl;
-import com.example.proyecto1.data.repository.UserRepositoryImpl;
+import com.example.proyecto1.AppContainer;
 import com.example.proyecto1.domain.model.Message;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.ChatRepository;
@@ -26,7 +16,7 @@ import com.example.proyecto1.domain.usecase.SendMessageUseCase;
 
 import java.util.List;
 
-public class ChatViewModel extends AndroidViewModel {
+public class ChatViewModel extends ViewModel {
 
     private final SendMessageUseCase sendMessageUseCase;
     private final GetMessagesUseCase getMessagesUseCase;
@@ -44,17 +34,14 @@ public class ChatViewModel extends AndroidViewModel {
     private String currentUserName;
 
 
-    public ChatViewModel(@NonNull Application application) {
-        super(application);
-        ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(new FirestoreChatSource(), new StorageSource(), new ImageCompressor(application));
-        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(new FirebaseAuthSource());
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(new FirestoreUserSource());
+    public ChatViewModel() {
+        AppContainer container = AppContainer.get();
 
-        this.sendMessageUseCase = new SendMessageUseCase(chatRepository);
-        this.getMessagesUseCase = new GetMessagesUseCase(chatRepository);
-        this.getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
-        this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
-        this.sendImageUseCase = new SendImageUseCase(chatRepository);
+        this.sendMessageUseCase = new SendMessageUseCase(container.chatRepository);
+        this.getMessagesUseCase = new GetMessagesUseCase(container.chatRepository);
+        this.getCurrentUserUseCase = new GetCurrentUserUseCase(container.authRepository);
+        this.getUserByIdUseCase = new GetUserByIdUseCase(container.userRepository);
+        this.sendImageUseCase = new SendImageUseCase(container.chatRepository);
     }
 
     public LiveData<List<Message>> getMessages() {

@@ -1,26 +1,17 @@
 package com.example.proyecto1.presentation.viewmodel;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.example.proyecto1.data.local.ImageCompressor;
-import com.example.proyecto1.data.remote.FirebaseAuthSource;
-import com.example.proyecto1.data.remote.FirestoreUserSource;
-import com.example.proyecto1.data.remote.StorageSource;
-import com.example.proyecto1.data.repository.AuthRepositoryImpl;
-import com.example.proyecto1.data.repository.ProfileRepositoryImpl;
-import com.example.proyecto1.data.repository.UserRepositoryImpl;
+import com.example.proyecto1.AppContainer;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.domain.usecase.GetCurrentUserUseCase;
 import com.example.proyecto1.domain.usecase.GetUserByIdUseCase;
 import com.example.proyecto1.domain.usecase.UpdateProfilePhotoUseCase;
 
-public class ProfileViewModel extends AndroidViewModel {
+public class ProfileViewModel extends ViewModel {
     private final GetCurrentUserUseCase getCurrentUserUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final UpdateProfilePhotoUseCase updateProfilePhotoUseCase;
@@ -29,15 +20,16 @@ public class ProfileViewModel extends AndroidViewModel {
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<Boolean> photoUpdated = new MutableLiveData<>();
 
-    public ProfileViewModel(@NonNull Application application) {
-        super(application);
-        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(new FirebaseAuthSource());
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(new FirestoreUserSource());
-        ProfileRepositoryImpl profileRepository = new ProfileRepositoryImpl(new ImageCompressor(application), new StorageSource());
+    public ProfileViewModel() {
+        AppContainer container = AppContainer.get();
 
-        getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
-        getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
-        updateProfilePhotoUseCase = new UpdateProfilePhotoUseCase(authRepository, profileRepository, userRepository);
+        getCurrentUserUseCase = new GetCurrentUserUseCase(container.authRepository);
+        getUserByIdUseCase = new GetUserByIdUseCase(container.userRepository);
+        updateProfilePhotoUseCase = new UpdateProfilePhotoUseCase(
+                container.authRepository,
+                container.profileRepository,
+                container.userRepository
+        );
     }
 
     public LiveData<User> getUser() {

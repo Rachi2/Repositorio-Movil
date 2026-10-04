@@ -6,10 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.proyecto1.data.remote.FirebaseAuthSource;
-import com.example.proyecto1.data.remote.FirestoreUserSource;
-import com.example.proyecto1.data.repository.AuthRepositoryImpl;
-import com.example.proyecto1.data.repository.UserRepositoryImpl;
+import com.example.proyecto1.AppContainer;
 import com.example.proyecto1.domain.model.User;
 import com.example.proyecto1.domain.repository.ChatRepository;
 import com.example.proyecto1.domain.usecase.GetCurrentUserUseCase;
@@ -26,17 +23,13 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<String> error = new MutableLiveData<>();
 
     public AuthViewModel() {
-        FirebaseAuthSource firebaseSource = new FirebaseAuthSource();
-        FirestoreUserSource firestoreUserSource = new FirestoreUserSource();
+        AppContainer container = AppContainer.get();
 
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(firestoreUserSource);
-        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(firebaseSource);
+        SaveUserUseCase saveUserUseCase = new SaveUserUseCase(container.userRepository);
 
-        SaveUserUseCase saveUserUseCase = new SaveUserUseCase(userRepository);
-
-        this.loginUseCase = new LoginUseCase(authRepository);
-        this.getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
-        this.registerUseCase = new RegisterUseCase(authRepository, saveUserUseCase);
+        this.loginUseCase = new LoginUseCase(container.authRepository);
+        this.getCurrentUserUseCase = new GetCurrentUserUseCase(container.authRepository);
+        this.registerUseCase = new RegisterUseCase(container.authRepository, saveUserUseCase);
     }
 
     public LiveData<Boolean> getLoading() {

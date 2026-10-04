@@ -21,6 +21,7 @@ public class KairoApp extends Application implements Application.ActivityLifecyc
     @Override
     public void onCreate() {
         super.onCreate();
+        AppContainer.init(this);
         registerActivityLifecycleCallbacks(this);
     }
 
