@@ -122,7 +122,7 @@ public class UsersViewModel extends ViewModel {
 
             @Override
             public void onError(Exception e) {
-                Log.e("FCM", "No se puedo registrar el dispositivo");
+                Log.e("FCM", "No se pudo registrar el dispositivo");
             }
         });
     }
